@@ -56,7 +56,7 @@ class PhpShell
     /**
      * @param string $command
      * @param bool   $printCommand
-     * @return object stdClass Object
+     * @return \stdClass Object
      *                (
      *                  [status] => int
      *                  [completeOutput] => array
@@ -92,7 +92,7 @@ class PhpShell
     /**
      * @param string $command
      * @param bool   $printCommand
-     * @return object stdClass Object
+     * @return \stdClass Object
      *                (
      *                  [status] => int
      *                  [lastLineOfOutput] => string
