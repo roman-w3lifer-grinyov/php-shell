@@ -57,11 +57,11 @@ class PhpShell
      * @param string $command
      * @param bool   $printCommand
      * @return \stdClass Object
-     *                (
-     *                  [status] => int
-     *                  [completeOutput] => array
-     *                  [lastLineOfOutput] => string
-     *                )
+     *                   (
+     *                     [status] => int
+     *                     [completeOutput] => array
+     *                     [lastLineOfOutput] => string
+     *                   )
      */
     public function exec($command, $printCommand = false)
     {
@@ -89,10 +89,10 @@ class PhpShell
      * @param string $command
      * @param bool   $printCommand
      * @return \stdClass Object
-     *                (
-     *                  [status] => int
-     *                  [lastLineOfOutput] => string
-     *                )
+     *                   (
+     *                     [status] => int
+     *                     [lastLineOfOutput] => string
+     *                   )
      */
     public function system($command, $printCommand = false)
     {
