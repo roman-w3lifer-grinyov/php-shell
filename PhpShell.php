@@ -69,11 +69,7 @@ class PhpShell
             echo $command . "\n";
         }
         $lastLineOfOutput = exec($command, $completeOutput, $status);
-        return (object) [
-            'status' => $status,
-            'completeOutput' => $completeOutput,
-            'lastLineOfOutput' => $lastLineOfOutput,
-        ];
+        return (object) compact('status', 'completeOutput', 'lastLineOfOutput');
     }
 
     /**
@@ -104,10 +100,7 @@ class PhpShell
             echo $command . "\n";
         }
         $lastLineOfOutput = system($command, $status);
-        return (object) [
-            'status' => $status,
-            'lastLineOfOutput' => $lastLineOfOutput,
-        ];
+        return (object) compact('status', 'lastLineOfOutput');
     }
 
     public function printSeparator()
