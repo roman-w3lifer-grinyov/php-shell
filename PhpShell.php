@@ -28,10 +28,17 @@ class PhpShell
         "\n";
 
     /**
+     * @var array
+     */
+    private $argv;
+
+    /**
      * @param array $config
      */
     public function __construct($config = [])
     {
+        global $argv;
+        $this->argv = $argv;
         $this->hostname = exec('hostname');
         $this->user = exec('echo -n $USER');
         $this->home = exec('echo -n $HOME');
@@ -70,6 +77,18 @@ class PhpShell
         }
         $lastLineOfOutput = exec($command, $completeOutput, $status);
         return (object) compact('status', 'completeOutput', 'lastLineOfOutput');
+    }
+
+    /**
+     * @param int $sequentialNumber
+     * @return string
+     */
+    public function getArgument($sequentialNumber)
+    {
+        return
+            isset($this->argv[$sequentialNumber])
+                ? $this->argv[$sequentialNumber]
+                : '';
     }
 
     /**
