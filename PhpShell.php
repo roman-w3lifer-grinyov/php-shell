@@ -2,6 +2,8 @@
 
 namespace w3lifer\phpShell;
 
+use stdClass;
+
 class PhpShell
 {
     public $hostname = '';
@@ -14,7 +16,7 @@ class PhpShell
 
     private $argv = [];
 
-    public function __construct($config = [])
+    public function __construct(array $config = [])
     {
         global $argv;
         $this->argv = $argv;
@@ -45,7 +47,7 @@ class PhpShell
      *                     [lastLineOfOutput] => string
      *                   )
      */
-    public function exec(string $command, bool $printCommand = false) : object
+    public function exec(string $command, bool $printCommand = false) : stdClass
     {
         if ($printCommand) {
             echo $command . "\n";
@@ -77,7 +79,7 @@ class PhpShell
      *                     [lastLineOfOutput] => string
      *                   )
      */
-    public function system(string $command, bool $printCommand = false) : object
+    public function system(string $command, bool $printCommand = false) : stdClass
     {
         if ($printCommand) {
             echo $command . "\n";
