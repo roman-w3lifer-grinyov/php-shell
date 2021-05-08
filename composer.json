@@ -1,12 +1,13 @@
 {
   "name": "w3lifer/php-shell",
+  "description": "Some set of methods ...",
   "keywords": [
     "php",
     "shell"
   ],
   "license": "MIT",
   "require": {
-    "php": "^7"
+    "php": "^7.0|^8.0"
   },
   "authors": [
     {
