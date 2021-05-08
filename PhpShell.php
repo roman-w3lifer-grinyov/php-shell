@@ -4,37 +4,16 @@ namespace w3lifer\phpShell;
 
 class PhpShell
 {
-    /**
-     * @var string
-     */
-    public $hostname;
+    public $hostname = '';
 
-    /**
-     * @var string
-     */
-    public $user;
+    public $user = '';
 
-    /**
-     * @var string
-     */
-    public $home;
+    public $home = '';
 
-    /**
-     * @var string
-     */
-    private $separator =
-        '----------------------------------------' .
-        '----------------------------------------' .
-        "\n";
+    private $separator = '--------------------------------------------------------------------------------' . "\n";
 
-    /**
-     * @var array
-     */
-    private $argv;
+    private $argv = [];
 
-    /**
-     * @param array $config
-     */
     public function __construct($config = [])
     {
         global $argv;
@@ -48,11 +27,9 @@ class PhpShell
     }
 
     /**
-     * @param string $question
-     * @return string
      * @see https://ru.stackoverflow.com/q/800670/201026
      */
-    public function ask($question)
+    public function ask(string $question) : string
     {
         echo $question;
         // Underscore is necessary for the case, when the ID starts with a digit
@@ -61,8 +38,6 @@ class PhpShell
     }
 
     /**
-     * @param string $command
-     * @param bool   $printCommand
      * @return \stdClass Object
      *                   (
      *                     [status] => int
@@ -70,7 +45,7 @@ class PhpShell
      *                     [lastLineOfOutput] => string
      *                   )
      */
-    public function exec($command, $printCommand = false)
+    public function exec(string $command, bool $printCommand = false) : object
     {
         if ($printCommand) {
             echo $command . "\n";
@@ -79,24 +54,15 @@ class PhpShell
         return (object) compact('status', 'completeOutput', 'lastLineOfOutput');
     }
 
-    /**
-     * @param int $sequentialNumber
-     * @return string
-     */
-    public function getArgument($sequentialNumber)
+    public function getArgument(int $sequentialNumber) : string
     {
-        return
-            isset($this->argv[$sequentialNumber])
-                ? $this->argv[$sequentialNumber]
-                : '';
+        return $this->argv[$sequentialNumber] ?? '';
     }
 
     /**
-     * @param string $command
-     * @param bool   $printCommand
      * @return string Complete output.
      */
-    public function shell_exec($command, $printCommand = false)
+    public function shell_exec(string $command, bool $printCommand = false) : string
     {
         if ($printCommand) {
             echo $command . "\n";
@@ -105,15 +71,13 @@ class PhpShell
     }
 
     /**
-     * @param string $command
-     * @param bool   $printCommand
      * @return \stdClass Object
      *                   (
      *                     [status] => int
      *                     [lastLineOfOutput] => string
      *                   )
      */
-    public function system($command, $printCommand = false)
+    public function system(string $command, bool $printCommand = false) : object
     {
         if ($printCommand) {
             echo $command . "\n";
@@ -127,10 +91,7 @@ class PhpShell
         echo $this->separator;
     }
 
-    /**
-     * @param string $title
-     */
-    public function printTitle($title)
+    public function printTitle(string $title)
     {
         echo $this->separator;
         echo $title . "\n";
