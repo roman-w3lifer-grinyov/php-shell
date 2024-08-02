@@ -1,6 +1,6 @@
 {
   "name": "w3lifer/php-shell",
-  "description": "Some set of methods ...",
+  "description": "Class for convenient use of system commands",
   "keywords": [
     "php",
     "shell"
