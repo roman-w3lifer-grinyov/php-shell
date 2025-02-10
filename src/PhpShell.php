@@ -1,20 +1,22 @@
 <?php
 
-namespace w3lifer\phpShell;
+declare(strict_types=1);
+
+namespace w3lifer\PhpShell;
 
 use stdClass;
 
 class PhpShell
 {
-    public $hostname = '';
+    public string $hostname = '';
 
-    public $user = '';
+    public string $user = '';
 
-    public $home = '';
+    public string $home = '';
 
-    private $separator = '--------------------------------------------------------------------------------' . "\n";
+    private string $separator = '--------------------------------------------------------------------------------' . "\n";
 
-    private $argv = [];
+    private array $argv = [];
 
     public function __construct(array $config = [])
     {
@@ -31,40 +33,40 @@ class PhpShell
     /**
      * @see https://ru.stackoverflow.com/q/800670/201026
      */
-    public function ask(string $question) : string
+    public function ask(string $question): string
     {
-        echo $question;
+        fwrite(STDOUT, $question . ' ');
         // Underscore is necessary for the case, when the ID starts with a digit
         $uniqueId = '_' . uniqid();
         return exec('read ' . $uniqueId . '; echo -n ${' . $uniqueId . '}');
     }
 
     /**
-     * @return \stdClass Object
-     *                   (
-     *                     [status] => int
-     *                     [completeOutput] => array
-     *                     [lastLineOfOutput] => string
-     *                   )
+     * @return stdClass Object
+     * (
+     *   [status] => int
+     *   [completeOutput] => array
+     *   [lastLineOfOutput] => string
+     * )
      */
-    public function exec(string $command, bool $printCommand = false) : stdClass
+    public function exec(string $command, bool $printCommand = false): stdClass
     {
         if ($printCommand) {
-            echo $command . "\n";
+            fwrite(STDOUT, $command);
         }
         $lastLineOfOutput = exec($command, $completeOutput, $status);
         return (object) compact('status', 'completeOutput', 'lastLineOfOutput');
     }
 
-    public function getArgument(int $sequentialNumber) : string
+    public function getArgument(int $sequentialNumber): string
     {
         return $this->argv[$sequentialNumber] ?? '';
     }
 
     /**
-     * @return string Complete output.
+     * @return string Complete output
      */
-    public function shell_exec(string $command, bool $printCommand = false) : string
+    public function shell_exec(string $command, bool $printCommand = false): string
     {
         if ($printCommand) {
             echo $command . "\n";
@@ -73,13 +75,14 @@ class PhpShell
     }
 
     /**
-     * @return \stdClass Object
-     *                   (
-     *                     [status] => int
-     *                     [lastLineOfOutput] => string
-     *                   )
+     *
+     * @return stdClass Object
+     * (
+     *   [status] => int
+     *   [lastLineOfOutput] => string
+     * )
      */
-    public function system(string $command, bool $printCommand = false) : stdClass
+    public function system(string $command, bool $printCommand = false): stdClass
     {
         if ($printCommand) {
             echo $command . "\n";
@@ -88,12 +91,12 @@ class PhpShell
         return (object) compact('status', 'lastLineOfOutput');
     }
 
-    public function printSeparator()
+    public function printSeparator(): void
     {
         echo $this->separator;
     }
 
-    public function printTitle(string $title)
+    public function printTitle(string $title): void
     {
         echo $this->separator;
         echo $title . "\n";
