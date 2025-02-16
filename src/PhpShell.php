@@ -16,7 +16,7 @@ class PhpShell
 
     public string $separator = '--------------------------------------------------------------------------------';
 
-    public function __construct(array $config = [])
+    public function __construct()
     {
         global $argv;
         $this->argv = $argv;
