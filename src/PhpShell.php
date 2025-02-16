@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace w3lifer\PhpShell;
 
-use stdClass;
-
 class PhpShell
 {
+    private array $argv;
+
     public string $hostname = '';
 
     public string $user = '';
 
     public string $home = '';
 
-    private string $separator = '--------------------------------------------------------------------------------' . "\n";
-
-    private array $argv = [];
+    public string $separator = '--------------------------------------------------------------------------------';
 
     public function __construct(array $config = [])
     {
@@ -25,9 +23,6 @@ class PhpShell
         $this->hostname = exec('hostname');
         $this->user = exec('echo -n $USER');
         $this->home = exec('echo -n $HOME');
-        if (isset($config['separator'])) {
-            $this->separator = $config['separator'];
-        }
     }
 
     /**
@@ -35,71 +30,56 @@ class PhpShell
      */
     public function ask(string $question): string
     {
-        fwrite(STDOUT, $question . ' ');
+        fwrite(STDOUT, $question . ' '); // [!] `fwrite` instead of `echo` is required for output when running tests
         // Underscore is necessary for the case, when the ID starts with a digit
         $uniqueId = '_' . uniqid();
         return exec('read ' . $uniqueId . '; echo -n ${' . $uniqueId . '}');
     }
 
     /**
-     * @return stdClass Object
-     * (
-     *   [status] => int
-     *   [completeOutput] => array
-     *   [lastLineOfOutput] => string
-     * )
+     * @return array{resultCode: int, output: string[], lastLineOfOutput: string}
      */
-    public function exec(string $command, bool $printCommand = false): stdClass
+    public function exec(string $command, bool $printCommand = false): array
     {
-        if ($printCommand) {
-            fwrite(STDOUT, $command);
-        }
-        $lastLineOfOutput = exec($command, $completeOutput, $status);
-        return (object) compact('status', 'completeOutput', 'lastLineOfOutput');
+        $printCommand && $this->printLine($command);
+        $lastLineOfOutput = exec($command, $output, $resultCode);
+        return compact('resultCode', 'output', 'lastLineOfOutput');
+    }
+
+    /**
+     * @return false|null|string Complete output
+     */
+    public function shell_exec(string $command, bool $printCommand = false): false|null|string
+    {
+        $printCommand && $this->printLine($command);
+        return shell_exec($command);
+    }
+
+    /**
+     * @return array{resultCode: string, lastLineOfOutput: string}
+     */
+    public function system(string $command, bool $printCommand = false): array
+    {
+        $printCommand && $this->printLine($command);
+        $lastLineOfOutput = system($command, $resultCode);
+        return compact('resultCode', 'lastLineOfOutput');
+    }
+
+    public function printLine(string $line): void
+    {
+        // [!] `fwrite` instead of `echo` is required for output when running tests
+        fwrite(STDOUT, $line . "\n");
+    }
+
+    public function printTitle(string $title): void
+    {
+        $this->printLine($this->separator);
+        $this->printLine($title);
+        $this->printLine($this->separator);
     }
 
     public function getArgument(int $sequentialNumber): string
     {
         return $this->argv[$sequentialNumber] ?? '';
-    }
-
-    /**
-     * @return string Complete output
-     */
-    public function shell_exec(string $command, bool $printCommand = false): string
-    {
-        if ($printCommand) {
-            echo $command . "\n";
-        }
-        return shell_exec($command);
-    }
-
-    /**
-     *
-     * @return stdClass Object
-     * (
-     *   [status] => int
-     *   [lastLineOfOutput] => string
-     * )
-     */
-    public function system(string $command, bool $printCommand = false): stdClass
-    {
-        if ($printCommand) {
-            echo $command . "\n";
-        }
-        $lastLineOfOutput = system($command, $status);
-        return (object) compact('status', 'lastLineOfOutput');
-    }
-
-    public function printSeparator(): void
-    {
-        echo $this->separator;
-    }
-
-    public function printTitle(string $title): void
-    {
-        echo $this->separator;
-        echo $title . "\n";
-        echo $this->separator;
     }
 }
